@@ -4,6 +4,8 @@
     {
         SomeValue1,
 
-        SomeValue2
+        SomeValue2 = 2,
+
+        SomeValue3
     }
 }

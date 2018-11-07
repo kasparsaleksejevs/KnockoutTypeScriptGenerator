@@ -41,9 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComplexClasses\Sample_Custom.cs" />
+    <Compile Include="ComplexClasses\Sample_MultipleEnums_MultipleInts.cs" />
+    <Compile Include="ComplexClasses\SomeOtherEnum.cs" />
+    <Compile Include="ComplexClasses\MyComplexEnum.cs" />
+    <Compile Include="ComplexClasses\Sample_EnumListWithStringList.cs" />
+    <Compile Include="ComplexClasses\Sample_EnumWithInt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleClasses\enum\MyEnum.cs" />
+    <Compile Include="SimpleClasses\enum\Sample_NullableEnum_List.cs" />
+    <Compile Include="SimpleClasses\enum\Sample_Enum_List.cs" />
     <Compile Include="SimpleClasses\enum\Sample_NullableEnum.cs" />
     <Compile Include="SimpleClasses\enum\Sample_Enum.cs" />
     <Compile Include="SimpleClasses\int\Sample_Int32_ListOfLists.cs" />
@@ -53,6 +59,8 @@
     <Compile Include="SimpleClasses\int\Sample_Int32_Array.cs" />
     <Compile Include="SimpleClasses\int\Sample_Int32_Nullable.cs" />
     <Compile Include="SimpleClasses\int\Sample_Int32.cs" />
+    <Compile Include="SimpleClasses\string\Sample_String_List.cs" />
+    <Compile Include="SimpleClasses\string\Sample_String.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

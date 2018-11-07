@@ -1,4 +1,4 @@
-﻿namespace KnockoutTypeScriptGenerator.Tests
+﻿namespace KnockoutTypeScriptGenerator.Tests.ReaderSimpleTests
 {
     public abstract class SimpleTestBase
     {

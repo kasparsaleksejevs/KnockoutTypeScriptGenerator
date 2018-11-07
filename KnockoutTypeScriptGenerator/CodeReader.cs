@@ -69,44 +69,51 @@ namespace KnockoutTypeScriptGenerator
             generatedClasses.Add(csClass);
         }
 
+        private void ProcessEnum(CodeEnum codeEnum)
+        {
+            //throw new NotImplementedException();
+            var csEnum = new CsEnum(codeEnum.Namespace.FullName, codeEnum.Name);
+            var enumMembers = codeEnum.Members.OfType<CodeVariable>();
+
+            // we use decimal to contain all possible enum values - from byte to ulong
+            decimal currentEnumNumericValue = 0;
+            foreach (var item in enumMembers)
+            {
+                var enumValue = string.Empty;
+                if (item.InitExpression != null)
+                {
+                    enumValue = item.InitExpression.ToString();
+                    if (decimal.TryParse(enumValue, out decimal value))
+                        currentEnumNumericValue = value;
+                }
+                else
+                    enumValue = currentEnumNumericValue.ToString("F0");
+
+                csEnum.EnumFields.Add(new CsEnumField
+                {
+                    Name = item.Name,
+                    NumericValue = enumValue
+                });
+
+                currentEnumNumericValue++;
+            }
+
+            generatedClasses.Add(csEnum);
+        }
+
         private CsProperty ProcessProperty(CodeProperty property)
         {
-            // do we even have the need to know if it is an enum?
-            //var isEnum = false;
-            //if (property.Type.TypeKind == vsCMTypeRef.vsCMTypeRefCodeType && property.Type.CodeType is CodeEnum)
-            //    isEnum = true;
-
             var csMember = new CsProperty
             {
                 Name = property.Name,
-                IsNullable = property.Type.AsFullName.StartsWith("System.Nullable<"),
-                IsArray = property.Type.TypeKind == vsCMTypeRef.vsCMTypeRefArray || property.Type.AsFullName.StartsWith("System.Collections"),
                 Type = property.Type.AsFullName
             };
 
-            if (csMember.IsNullable)
+            var propertyIsArray = property.Type.TypeKind == vsCMTypeRef.vsCMTypeRefArray || csMember.Type.StartsWith("System.Collections");
+            if (propertyIsArray)
             {
-                var nullableMatch = nullableTypeRegex.Match(csMember.Type);
-                if (nullableMatch.Success)
-                    csMember.Type = nullableMatch.Groups[1].Value;
-                if (!this.IsSystemType(csMember.Type))
-                {
-                    // check if we have the type already generated
-                    // TODO:
+                csMember.IsArray = true;
 
-                    // find related class/enum projectItem
-
-                    var codeElement = this.GetCodeElementByFullName(csMember.Type);
-                    if (codeElement.Kind == vsCMElement.vsCMElementEnum)
-                    {
-                        //csMember.IsEnum = true;
-                        ProcessEnum(codeElement as CodeEnum);
-                    }
-                }
-            }
-
-            if (csMember.IsArray)
-            {
                 var genericCollectionMatch = genericTypeRegex.Match(csMember.Type);
                 if (genericCollectionMatch.Success)
                     csMember.Type = genericCollectionMatch.Groups[1].Value;
@@ -114,7 +121,32 @@ namespace KnockoutTypeScriptGenerator
                     csMember.Type = csMember.Type.Substring(0, csMember.Type.Length - 2);
             }
 
+            var propertyIsNullable = csMember.Type.StartsWith("System.Nullable<");
+            if (propertyIsNullable)
+            {
+                var nullableMatch = nullableTypeRegex.Match(csMember.Type);
+                if (nullableMatch.Success)
+                {
+                    csMember.IsNullable = true;
+                    csMember.Type = nullableMatch.Groups[1].Value;
+                }
+            }
+
+            ProcessReferencedTypeByName(csMember.Type);
+
             return csMember;
+        }
+
+        private void ProcessReferencedTypeByName(string fullTypeName)
+        {
+            if (!this.IsSystemType(fullTypeName) && !this.generatedClasses.Any(m => m.FullName == fullTypeName))
+            {
+                var codeElement = this.GetCodeElementByFullName(fullTypeName);
+                if (codeElement.Kind == vsCMElement.vsCMElementEnum)
+                    ProcessEnum(codeElement as CodeEnum);
+                if (codeElement.Kind == vsCMElement.vsCMElementClass)
+                    ProcessClass(codeElement as CodeClass);
+            }
         }
 
         private bool IsSystemType(string typeName)
@@ -177,11 +209,6 @@ namespace KnockoutTypeScriptGenerator
             }
 
             return null;
-        }
-
-        private void ProcessEnum(CodeEnum member)
-        {
-            //throw new NotImplementedException();
         }
 
         private void WriteClass(CsClass csClass)

@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.Linq;
 
-namespace KnockoutTypeScriptGenerator.Tests
+namespace KnockoutTypeScriptGenerator.Tests.ReaderSimpleTests
 {
     [TestClass]
     public class IntegerTests : SimpleTestBase
@@ -20,21 +20,19 @@ namespace KnockoutTypeScriptGenerator.Tests
             var classes = processor.GetClassList().OfType<CsClass>().ToList();
 
             classes.Count.ShouldBe(1);
-            var target = classes.First();
+            var targetClass = classes.First();
 
-            target.Name.ShouldBe(nameof(Sample_Int32));
-            target.Namespace.ShouldBe($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}");
-            target.Properties.Count.ShouldBe(1);
-
-            var targetProperty = new CsProperty
+            var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}";
+            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_Int32));
+            expectedClass.Properties.Add(new CsProperty
             {
                 Name = nameof(Sample_Int32.MyInt32Property),
                 Type = typeof(int).ToString(),
                 IsArray = false,
                 IsNullable = false
-            };
+            });
 
-            target.Properties.First().ShouldBe(targetProperty);
+            targetClass.ShouldBe(expectedClass);
         }
 
         [TestMethod]
@@ -48,21 +46,19 @@ namespace KnockoutTypeScriptGenerator.Tests
             var classes = processor.GetClassList().OfType<CsClass>().ToList();
 
             classes.Count.ShouldBe(1);
-            var target = classes.First();
+            var targetClass = classes.First();
 
-            target.Name.ShouldBe(nameof(Sample_Int32_Nullable));
-            target.Namespace.ShouldBe($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}");
-            target.Properties.Count.ShouldBe(1);
-
-            var targetProperty = new CsProperty
+            var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}";
+            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_Int32_Nullable));
+            expectedClass.Properties.Add(new CsProperty
             {
                 Name = nameof(Sample_Int32_Nullable.MyInt32Property),
                 Type = typeof(int).ToString(),
                 IsArray = false,
                 IsNullable = true
-            };
+            });
 
-            target.Properties.First().ShouldBe(targetProperty);
+            targetClass.ShouldBe(expectedClass);
         }
 
         [TestMethod]
@@ -76,21 +72,19 @@ namespace KnockoutTypeScriptGenerator.Tests
             var classes = processor.GetClassList().OfType<CsClass>().ToList();
 
             classes.Count.ShouldBe(1);
-            var target = classes.First();
+            var targetClass = classes.First();
 
-            target.Name.ShouldBe(nameof(Sample_Int32_Array));
-            target.Namespace.ShouldBe($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}");
-            target.Properties.Count.ShouldBe(1);
-
-            var targetProperty = new CsProperty
+            var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}";
+            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_Int32_Array));
+            expectedClass.Properties.Add(new CsProperty
             {
                 Name = nameof(Sample_Int32_Array.MyInt32ArrayProperty),
                 Type = typeof(int).ToString(),
                 IsArray = true,
                 IsNullable = false
-            };
+            });
 
-            target.Properties.First().ShouldBe(targetProperty);
+            targetClass.ShouldBe(expectedClass);
         }
 
         [TestMethod]
@@ -104,21 +98,19 @@ namespace KnockoutTypeScriptGenerator.Tests
             var classes = processor.GetClassList().OfType<CsClass>().ToList();
 
             classes.Count.ShouldBe(1);
-            var target = classes.First();
+            var targetClass = classes.First();
 
-            target.Name.ShouldBe(nameof(Sample_Int32_IEnumerable));
-            target.Namespace.ShouldBe($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}");
-            target.Properties.Count.ShouldBe(1);
-
-            var targetProperty = new CsProperty
+            var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}";
+            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_Int32_IEnumerable));
+            expectedClass.Properties.Add(new CsProperty
             {
                 Name = nameof(Sample_Int32_IEnumerable.MyInt32EnumerableProperty),
                 Type = typeof(int).ToString(),
                 IsArray = true,
                 IsNullable = false
-            };
+            });
 
-            target.Properties.First().ShouldBe(targetProperty);
+            targetClass.ShouldBe(expectedClass);
         }
 
         [TestMethod]
@@ -132,21 +124,19 @@ namespace KnockoutTypeScriptGenerator.Tests
             var classes = processor.GetClassList().OfType<CsClass>().ToList();
 
             classes.Count.ShouldBe(1);
-            var target = classes.First();
+            var targetClass = classes.First();
 
-            target.Name.ShouldBe(nameof(Sample_Int32_IList));
-            target.Namespace.ShouldBe($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}");
-            target.Properties.Count.ShouldBe(1);
-
-            var targetProperty = new CsProperty
+            var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}";
+            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_Int32_IList));
+            expectedClass.Properties.Add(new CsProperty
             {
                 Name = nameof(Sample_Int32_IList.MyInt32IListProperty),
                 Type = typeof(int).ToString(),
                 IsArray = true,
                 IsNullable = false
-            };
+            });
 
-            target.Properties.First().ShouldBe(targetProperty);
+            targetClass.ShouldBe(expectedClass);
         }
 
         [TestMethod]
@@ -160,21 +150,19 @@ namespace KnockoutTypeScriptGenerator.Tests
             var classes = processor.GetClassList().OfType<CsClass>().ToList();
 
             classes.Count.ShouldBe(1);
-            var target = classes.First();
+            var targetClass = classes.First();
 
-            target.Name.ShouldBe(nameof(Sample_Int32_List));
-            target.Namespace.ShouldBe($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}");
-            target.Properties.Count.ShouldBe(1);
-
-            var targetProperty = new CsProperty
+            var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}";
+            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_Int32_List));
+            expectedClass.Properties.Add(new CsProperty
             {
                 Name = nameof(Sample_Int32_List.MyInt32ListProperty),
                 Type = typeof(int).ToString(),
                 IsArray = true,
                 IsNullable = false
-            };
+            });
 
-            target.Properties.First().ShouldBe(targetProperty);
+            targetClass.ShouldBe(expectedClass);
         }
 
         [TestMethod, Ignore]
@@ -188,21 +176,19 @@ namespace KnockoutTypeScriptGenerator.Tests
             var classes = processor.GetClassList().OfType<CsClass>().ToList();
 
             classes.Count.ShouldBe(1);
-            var target = classes.First();
+            var targetClass = classes.First();
 
-            target.Name.ShouldBe(nameof(Sample_Int32_ListOfLists));
-            target.Namespace.ShouldBe($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}");
-            target.Properties.Count.ShouldBe(1);
-
-            var targetProperty = new CsProperty
+            var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}";
+            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_Int32_ListOfLists));
+            expectedClass.Properties.Add(new CsProperty
             {
                 Name = nameof(Sample_Int32_ListOfLists.MyInt32ListOfListProperty),
                 Type = typeof(int).ToString(), // well, this is not right
                 IsArray = true,
                 IsNullable = false
-            };
+            });
 
-            target.Properties.First().ShouldBe(targetProperty);
+            targetClass.ShouldBe(expectedClass);
         }
     }
 }
