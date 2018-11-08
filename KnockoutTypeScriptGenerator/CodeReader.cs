@@ -17,7 +17,7 @@ namespace KnockoutTypeScriptGenerator
 
         private List<(string fileName, string fullClassName)> solutionItems = new List<(string fileName, string fullClassName)>();
 
-        private List<IStuff> generatedClasses = new List<IStuff>();
+        private List<IGeneratorCodeItem> generatorCodeItems = new List<IGeneratorCodeItem>();
 
         private List<string> classesFullNamesProcessed = new List<string>();
         private List<string> classesFullNamesToProcess = new List<string>();
@@ -27,6 +27,12 @@ namespace KnockoutTypeScriptGenerator
             this.dte = dte;
         }
 
+        /// <summary>
+        /// Processes the class file - parses the code and generates one or more code items that contain metadata about specific class/enum (and linked classes/enums).
+        /// All processed [unique] results are accumulated and can be retrieved using <see cref="GetGeneratorCodeItems"/> method,
+        /// or directly converted to TypeScript using <c>Generate*</c> methods.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
         public void ProcessClassFile(string fileName)
         {
             var projectItem = this.dte.Solution.FindProjectItem(fileName);
@@ -38,55 +44,50 @@ namespace KnockoutTypeScriptGenerator
                     var cn = (CodeNamespace)element;
                     foreach (CodeElement member in cn.Members)
                     {
-                        //Console.WriteLine($"Member: {member.FullName}");
-
                         if (member.Kind == vsCMElement.vsCMElementClass)
-                            ProcessClass((CodeClass)member);
+                            this.ProcessClass((CodeClass)member);
                         else if (member.Kind == vsCMElement.vsCMElementEnum)
-                            ProcessEnum((CodeEnum)member);
-
-                        // what else we could process?
+                            this.ProcessEnum((CodeEnum)member);
                     }
                 }
             }
         }
 
-        public List<IStuff> GetClassList()
+        public List<IGeneratorCodeItem> GetGeneratorCodeItems()
         {
-            return this.generatedClasses.OrderBy(o => o.FullName).ToList();
+            return this.generatorCodeItems.OrderBy(o => o.FullName).ToList();
         }
 
         public string GenerateInterface()
         {
-            return new InterfaceGenerator().GenerateInterface(this.generatedClasses);
+            return new InterfaceGenerator().GenerateInterface(this.generatorCodeItems);
         }
 
         public string GenerateInterface(string typeName)
         {
-            var stuff = this.generatedClasses.First(m => m.FullName == typeName);
-            return new InterfaceGenerator().GenerateInterface(stuff);
+            var codeItem = this.generatorCodeItems.First(m => m.FullName == typeName);
+            return new InterfaceGenerator().GenerateInterface(codeItem);
         }
 
         private void ProcessClass(CodeClass codeClass)
         {
-            var csClass = new CsClass(codeClass.Namespace.FullName, codeClass.Name);
+            var generatorClass = new GeneratorCodeClass(codeClass.Namespace.FullName, codeClass.Name);
 
             var properties = codeClass.Members.OfType<CodeProperty>().Where(m => m.Access == vsCMAccess.vsCMAccessPublic);
             foreach (var item in properties)
             {
-                csClass.Properties.Add(this.ProcessProperty(item));
+                generatorClass.Properties.Add(this.ProcessProperty(item));
             }
 
-            generatedClasses.Add(csClass);
+            generatorCodeItems.Add(generatorClass);
         }
 
         private void ProcessEnum(CodeEnum codeEnum)
         {
-            //throw new NotImplementedException();
-            var csEnum = new CsEnum(codeEnum.Namespace.FullName, codeEnum.Name);
+            var generatorEnum = new GeneratorCodeEnum(codeEnum.Namespace.FullName, codeEnum.Name);
             var enumMembers = codeEnum.Members.OfType<CodeVariable>();
 
-            // we use decimal to contain all possible enum values - from byte to ulong
+            // we use decimal to encompass all possible enum values - from byte to ulong
             decimal currentEnumNumericValue = 0;
             foreach (var item in enumMembers)
             {
@@ -100,7 +101,7 @@ namespace KnockoutTypeScriptGenerator
                 else
                     enumValue = currentEnumNumericValue.ToString("F0");
 
-                csEnum.EnumFields.Add(new CsEnumField
+                generatorEnum.EnumFields.Add(new GeneratorCodeEnumField
                 {
                     Name = item.Name,
                     NumericValue = enumValue
@@ -109,12 +110,12 @@ namespace KnockoutTypeScriptGenerator
                 currentEnumNumericValue++;
             }
 
-            generatedClasses.Add(csEnum);
+            generatorCodeItems.Add(generatorEnum);
         }
 
-        private CsProperty ProcessProperty(CodeProperty property)
+        private GeneratorCodeProperty ProcessProperty(CodeProperty property)
         {
-            var csMember = new CsProperty
+            var csMember = new GeneratorCodeProperty
             {
                 Name = property.Name,
                 Type = property.Type.AsFullName
@@ -150,13 +151,13 @@ namespace KnockoutTypeScriptGenerator
 
         private void ProcessReferencedTypeByName(string fullTypeName)
         {
-            if (!this.IsSystemType(fullTypeName) && !this.generatedClasses.Any(m => m.FullName == fullTypeName))
+            if (!this.IsSystemType(fullTypeName) && !this.generatorCodeItems.Any(m => m.FullName == fullTypeName))
             {
                 var codeElement = this.GetCodeElementByFullName(fullTypeName);
                 if (codeElement.Kind == vsCMElement.vsCMElementEnum)
-                    ProcessEnum(codeElement as CodeEnum);
+                    this.ProcessEnum(codeElement as CodeEnum);
                 if (codeElement.Kind == vsCMElement.vsCMElementClass)
-                    ProcessClass(codeElement as CodeClass);
+                    this.ProcessClass(codeElement as CodeClass);
             }
         }
 
@@ -220,20 +221,6 @@ namespace KnockoutTypeScriptGenerator
             }
 
             return null;
-        }
-
-        private void WriteClass(CsClass csClass)
-        {
-            var rez = $"{csClass.Namespace}\r\npublic class {csClass.Name} \r\n{{\r\n";
-            foreach (var item in csClass.Properties)
-            {
-                //var mappedType = MapToTypeScriptType(item.Type);
-                rez += $"\tpublic {item.Type}{(item.IsNullable ? "?" : string.Empty)} {item.Name} {{ get;set; }}\r\n";
-            }
-
-            rez += "}\r\n";
-
-            Console.WriteLine(rez);
         }
     }
 }
