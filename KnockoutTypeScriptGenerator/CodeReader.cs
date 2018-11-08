@@ -56,6 +56,17 @@ namespace KnockoutTypeScriptGenerator
             return this.generatedClasses.OrderBy(o => o.FullName).ToList();
         }
 
+        public string GenerateInterface()
+        {
+            return new InterfaceGenerator().GenerateInterface(this.generatedClasses);
+        }
+
+        public string GenerateInterface(string typeName)
+        {
+            var stuff = this.generatedClasses.First(m => m.FullName == typeName);
+            return new InterfaceGenerator().GenerateInterface(stuff);
+        }
+
         private void ProcessClass(CodeClass codeClass)
         {
             var csClass = new CsClass(codeClass.Namespace.FullName, codeClass.Name);

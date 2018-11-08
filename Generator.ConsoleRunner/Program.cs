@@ -18,12 +18,12 @@ namespace Generator.ConsoleRunner
             //processor.ProcessClassFile($@"{solutionName}\Generator.SampleLibrary\SimpleClasses\Sample_Int32.cs");
 
             //processor.ProcessClassFile($@"{solutionName}\Generator.SampleLibrary\SimpleClasses\enum\Sample_Enum.cs");
-            processor.ProcessClassFile($@"{solutionName}\Generator.SampleLibrary\SimpleClasses\enum\Sample_NullableEnum.cs");
-
+            processor.ProcessClassFile($@"{solutionName}\Generator.SampleLibrary\ComplexClasses\Sample_MultipleEnums_MultipleInts.cs");
             //processor.ProcessClassFile($@"{solutionName}\MyGenerator\Simple\Sample_NullableEnum.cs");
 
-
-            processor.GetClassList();
+            //var rez = processor.GenerateInterface("Generator.SampleLibrary.ComplexClasses.Sample_MultipleEnums_MultipleInts");
+            var rez = processor.GenerateInterface();
+            Console.WriteLine(rez);
 
 
             Console.WriteLine("=============");

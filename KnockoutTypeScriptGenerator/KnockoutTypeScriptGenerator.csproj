@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="CodeReader.cs" />
     <Compile Include="DteLoader.cs" />
+    <Compile Include="InterfaceGenerator.cs" />
+    <Compile Include="KnockoutClassGenerator.cs" />
     <Compile Include="Metadata\CsClass.cs" />
     <Compile Include="Metadata\CsEnum.cs" />
     <Compile Include="Metadata\CsProperty.cs" />
