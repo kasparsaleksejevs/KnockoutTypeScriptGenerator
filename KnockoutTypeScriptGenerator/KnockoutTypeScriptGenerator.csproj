@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeReader.cs" />
+    <Compile Include="ControllerMethodsReader.cs" />
     <Compile Include="DteLoader.cs" />
     <Compile Include="InterfaceGenerator.cs" />
     <Compile Include="KnockoutClassGenerator.cs" />
