@@ -17,8 +17,8 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderComplexTests
             var processor = new CodeReader(dte);
             processor.ProcessClassFile($@"{solutionName}{complexClassesPath}\Sample_EnumWithInt.cs");
 
-            var classes = processor.GetClassList().OfType<CsClass>().ToList();
-            var enums = processor.GetClassList().OfType<CsEnum>().ToList();
+            var classes = processor.GetGeneratorCodeItems().OfType<GeneratorCodeClass>().ToList();
+            var enums = processor.GetGeneratorCodeItems().OfType<GeneratorCodeEnum>().ToList();
 
             classes.Count.ShouldBe(1);
             enums.Count.ShouldBe(1);
@@ -27,16 +27,16 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderComplexTests
             var targetEnum = enums.First();
 
             var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.ComplexClasses)}";
-            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_EnumWithInt));
+            var expectedClass = new GeneratorCodeClass(expectedNamespace, nameof(Sample_EnumWithInt));
             // order is important...
-            expectedClass.Properties.Add(new CsProperty
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_EnumWithInt.MyEnumProperty),
                 Type = typeof(MyComplexEnum).ToString(),
                 IsArray = false,
                 IsNullable = true
             });
-            expectedClass.Properties.Add(new CsProperty
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_EnumWithInt.MyIntProperty),
                 Type = typeof(int).ToString(),
@@ -58,8 +58,8 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderComplexTests
             var processor = new CodeReader(dte);
             processor.ProcessClassFile($@"{solutionName}{complexClassesPath}\Sample_EnumListWithStringList.cs");
 
-            var classes = processor.GetClassList().OfType<CsClass>().ToList();
-            var enums = processor.GetClassList().OfType<CsEnum>().ToList();
+            var classes = processor.GetGeneratorCodeItems().OfType<GeneratorCodeClass>().ToList();
+            var enums = processor.GetGeneratorCodeItems().OfType<GeneratorCodeEnum>().ToList();
 
             classes.Count.ShouldBe(1);
             enums.Count.ShouldBe(1);
@@ -68,15 +68,15 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderComplexTests
             var targetEnum = enums.First();
 
             var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.ComplexClasses)}";
-            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_EnumListWithStringList));
-            expectedClass.Properties.Add(new CsProperty
+            var expectedClass = new GeneratorCodeClass(expectedNamespace, nameof(Sample_EnumListWithStringList));
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_EnumListWithStringList.MyEnumList),
                 Type = typeof(MyComplexEnum).ToString(),
                 IsArray = true,
                 IsNullable = false
             });
-            expectedClass.Properties.Add(new CsProperty
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_EnumListWithStringList.MyStringList),
                 Type = typeof(string).ToString(),
@@ -98,8 +98,8 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderComplexTests
             var processor = new CodeReader(dte);
             processor.ProcessClassFile($@"{solutionName}{complexClassesPath}\Sample_MultipleEnums_MultipleInts.cs");
 
-            var classes = processor.GetClassList().OfType<CsClass>().ToList();
-            var enums = processor.GetClassList().OfType<CsEnum>().ToList();
+            var classes = processor.GetGeneratorCodeItems().OfType<GeneratorCodeClass>().ToList();
+            var enums = processor.GetGeneratorCodeItems().OfType<GeneratorCodeEnum>().ToList();
 
             classes.Count.ShouldBe(1);
             enums.Count.ShouldBe(2);
@@ -109,29 +109,29 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderComplexTests
             var targetOtherEnum = enums.First(m => m.Name == nameof(SomeOtherEnum));
 
             var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.ComplexClasses)}";
-            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_MultipleEnums_MultipleInts));
-            expectedClass.Properties.Add(new CsProperty
+            var expectedClass = new GeneratorCodeClass(expectedNamespace, nameof(Sample_MultipleEnums_MultipleInts));
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_MultipleEnums_MultipleInts.MyEnumProperty),
                 Type = typeof(MyComplexEnum).ToString(),
                 IsArray = false,
                 IsNullable = false
             });
-            expectedClass.Properties.Add(new CsProperty
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_MultipleEnums_MultipleInts.MyIntProperty),
                 Type = typeof(int).ToString(),
                 IsArray = false,
                 IsNullable = false
             });
-            expectedClass.Properties.Add(new CsProperty
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_MultipleEnums_MultipleInts.OtherEnumProperty),
                 Type = typeof(SomeOtherEnum).ToString(),
                 IsArray = false,
                 IsNullable = true
             });
-            expectedClass.Properties.Add(new CsProperty
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_MultipleEnums_MultipleInts.MyIntListProperty),
                 Type = typeof(int).ToString(),
@@ -148,22 +148,22 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderComplexTests
             targetOtherEnum.ShouldBe(expectedOtherEnum);
         }
 
-        private CsEnum GetExpectedMyEnum()
+        private GeneratorCodeEnum GetExpectedMyEnum()
         {
-            var expectedEnum = new CsEnum($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.ComplexClasses)}", nameof(MyComplexEnum));
-            expectedEnum.EnumFields.Add(new CsEnumField { Name = nameof(MyComplexEnum.SomeEnumValue1), NumericValue = "0" });
-            expectedEnum.EnumFields.Add(new CsEnumField { Name = nameof(MyComplexEnum.SomeEnumValue2), NumericValue = "2" });
-            expectedEnum.EnumFields.Add(new CsEnumField { Name = nameof(MyComplexEnum.SomeEnumValue3), NumericValue = "3" });
+            var expectedEnum = new GeneratorCodeEnum($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.ComplexClasses)}", nameof(MyComplexEnum));
+            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(MyComplexEnum.SomeEnumValue1), NumericValue = "0", Description = "\"Some Enum Value 1\"" });
+            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(MyComplexEnum.SomeEnumValue2), NumericValue = "2", Description = "\"Some Enum Value 2\"" });
+            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(MyComplexEnum.SomeEnumValue3), NumericValue = "3", Description = "TextResources.SomeEnumValue3" });
 
             return expectedEnum;
         }
 
-        private CsEnum GetExpectedOtherEnum()
+        private GeneratorCodeEnum GetExpectedOtherEnum()
         {
-            var expectedEnum = new CsEnum($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.ComplexClasses)}", nameof(SomeOtherEnum));
-            expectedEnum.EnumFields.Add(new CsEnumField { Name = nameof(SomeOtherEnum.FirstValue), NumericValue = "1" });
-            expectedEnum.EnumFields.Add(new CsEnumField { Name = nameof(SomeOtherEnum.SecondValue), NumericValue = "2" });
-            expectedEnum.EnumFields.Add(new CsEnumField { Name = nameof(SomeOtherEnum.ThirdValue), NumericValue = "3" });
+            var expectedEnum = new GeneratorCodeEnum($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.ComplexClasses)}", nameof(SomeOtherEnum));
+            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(SomeOtherEnum.FirstValue), NumericValue = "1" });
+            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(SomeOtherEnum.SecondValue), NumericValue = "2" });
+            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(SomeOtherEnum.ThirdValue), NumericValue = "3" });
 
             return expectedEnum;
         }

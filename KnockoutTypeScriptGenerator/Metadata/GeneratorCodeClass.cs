@@ -2,9 +2,9 @@
 
 namespace KnockoutTypeScriptGenerator.Metadata
 {
-    public class CsClass : IStuff
+    public class GeneratorCodeClass : IGeneratorCodeItem
     {
-        public CsClass(string classNamespace, string className, List<CsProperty> properties = null)
+        public GeneratorCodeClass(string classNamespace, string className, List<GeneratorCodeProperty> properties = null)
         {
             this.Namespace = classNamespace;
             this.Name = className;
@@ -19,13 +19,6 @@ namespace KnockoutTypeScriptGenerator.Metadata
 
         public string FullName { get; }
 
-        public List<CsProperty> Properties { get; } = new List<CsProperty>();
-    }
-
-    public interface IStuff
-    {
-        string Namespace { get; }
-        string Name { get; }
-        string FullName { get; }
+        public List<GeneratorCodeProperty> Properties { get; } = new List<GeneratorCodeProperty>();
     }
 }

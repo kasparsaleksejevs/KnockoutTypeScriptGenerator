@@ -16,14 +16,14 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderSimpleTests
             var processor = new CodeReader(dte);
             processor.ProcessClassFile($@"{solutionName}{simpleClassesPath}\string\Sample_String.cs");
 
-            var classes = processor.GetClassList().OfType<CsClass>().ToList();
+            var classes = processor.GetGeneratorCodeItems().OfType<GeneratorCodeClass>().ToList();
 
             classes.Count.ShouldBe(1);
             var targetClass = classes.First();
 
             var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}";
-            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_String));
-            expectedClass.Properties.Add(new CsProperty
+            var expectedClass = new GeneratorCodeClass(expectedNamespace, nameof(Sample_String));
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_String.MyStringProperty),
                 Type = typeof(string).ToString(),
@@ -41,14 +41,14 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderSimpleTests
             var processor = new CodeReader(dte);
             processor.ProcessClassFile($@"{solutionName}{simpleClassesPath}\string\Sample_String_List.cs");
 
-            var classes = processor.GetClassList().OfType<CsClass>().ToList();
+            var classes = processor.GetGeneratorCodeItems().OfType<GeneratorCodeClass>().ToList();
 
             classes.Count.ShouldBe(1);
             var targetClass = classes.First();
 
             var expectedNamespace = $"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.SimpleClasses)}";
-            var expectedClass = new CsClass(expectedNamespace, nameof(Sample_String_List));
-            expectedClass.Properties.Add(new CsProperty
+            var expectedClass = new GeneratorCodeClass(expectedNamespace, nameof(Sample_String_List));
+            expectedClass.Properties.Add(new GeneratorCodeProperty
             {
                 Name = nameof(Sample_String_List.MyStringListProperty),
                 Type = typeof(string).ToString(),

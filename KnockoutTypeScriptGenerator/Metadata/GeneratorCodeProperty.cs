@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace KnockoutTypeScriptGenerator.Metadata
+﻿namespace KnockoutTypeScriptGenerator.Metadata
 {
-    public class CsProperty
+    public class GeneratorCodeProperty
     {
         public string Name { get; set; }
 
@@ -32,26 +29,5 @@ namespace KnockoutTypeScriptGenerator.Metadata
         ///   <c>True</c> if this property is nullable; otherwise, <c>false</c>.
         /// </value>
         public bool IsNullable { get; set; }
-
-        public string GetJavascriptType()
-        {
-            var numericTypes = new List<string> { typeof(int).ToString(), typeof(long).ToString(), typeof(decimal).ToString(), typeof(float).ToString(), typeof(double).ToString(), typeof(byte).ToString() };
-            var stringTypes = new List<string> { typeof(string).ToString(), typeof(char).ToString() };
-
-            string jsPropertyType = null;
-
-            if (numericTypes.Contains(this.Type))
-                jsPropertyType = "number";
-            else if (stringTypes.Contains(this.Type))
-                jsPropertyType = "string";
-            else if (this.Type == typeof(bool).ToString())
-                jsPropertyType = "boolean";
-            else if (this.Type == typeof(DateTime).ToString())
-                jsPropertyType = "Date";
-            else
-                jsPropertyType = this.Type;
-
-            return jsPropertyType;
-        }
     }
 }

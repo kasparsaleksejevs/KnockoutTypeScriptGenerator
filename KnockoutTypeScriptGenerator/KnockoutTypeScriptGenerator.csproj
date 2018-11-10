@@ -60,10 +60,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeReader.cs" />
+    <Compile Include="ControllerMethodsReader.cs" />
     <Compile Include="DteLoader.cs" />
-    <Compile Include="Metadata\CsClass.cs" />
-    <Compile Include="Metadata\CsEnum.cs" />
-    <Compile Include="Metadata\CsProperty.cs" />
+    <Compile Include="InterfaceGenerator.cs" />
+    <Compile Include="KnockoutClassGenerator.cs" />
+    <Compile Include="Metadata\GeneratorCodeClass.cs" />
+    <Compile Include="Metadata\GeneratorCodeEnum.cs" />
+    <Compile Include="Metadata\GeneratorCodeEnumField.cs" />
+    <Compile Include="Metadata\GeneratorCodeProperty.cs" />
+    <Compile Include="Metadata\IGeneratorCodeItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
