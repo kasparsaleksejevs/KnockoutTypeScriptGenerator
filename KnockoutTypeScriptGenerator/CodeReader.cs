@@ -1,6 +1,6 @@
 ﻿using EnvDTE;
+using EnvDTE80;
 using KnockoutTypeScriptGenerator.Metadata;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -89,28 +89,65 @@ namespace KnockoutTypeScriptGenerator
 
             // we use decimal to encompass all possible enum values - from byte to ulong
             decimal currentEnumNumericValue = 0;
-            foreach (var item in enumMembers)
+            foreach (var enumMember in enumMembers)
             {
                 var enumValue = string.Empty;
-                if (item.InitExpression != null)
+                if (enumMember.InitExpression != null)
                 {
-                    enumValue = item.InitExpression.ToString();
+                    enumValue = enumMember.InitExpression.ToString();
                     if (decimal.TryParse(enumValue, out decimal value))
                         currentEnumNumericValue = value;
                 }
                 else
                     enumValue = currentEnumNumericValue.ToString("F0");
 
+                var description = this.GetEnumsDescription(enumMember);
+
                 generatorEnum.EnumFields.Add(new GeneratorCodeEnumField
                 {
-                    Name = item.Name,
-                    NumericValue = enumValue
+                    Name = enumMember.Name,
+                    NumericValue = enumValue,
+                    Description = description
                 });
 
                 currentEnumNumericValue++;
             }
 
             generatorCodeItems.Add(generatorEnum);
+        }
+
+        private string GetEnumsDescription(CodeVariable enumMember)
+        {
+            string description = null;
+            // supported enum description attributes: System.ComponentModel.DataAnnotations.DisplayAttribute, System.ComponentModel.DescriptionAttribute
+            foreach (CodeAttribute item in enumMember.Attributes)
+            {
+                if (item.Name == "Description")
+                {
+                    description = item.Value;
+                }
+                else if (item.Name == "Display")
+                {
+                    // things are getting dirty: value can be 'Name = nameof(SomeEnumValue3), ResourceType = typeof(TextResources)' or 'Name = "Some Enum Value 1"', etc.
+                    if (item.Children.Count > 0)
+                    {
+                        var resourceType = string.Empty;
+                        foreach (var attributeParam in item.Children.OfType<CodeAttributeArgument>())
+                        {
+                            if (attributeParam.Name == "Name")
+                                description = attributeParam.Value.Replace("nameof(", "").Replace(")", "");
+
+                            if (attributeParam.Name == "ResourceType")
+                                resourceType = attributeParam.Value.Replace("typeof(", "").Replace(")", "");
+                        }
+
+                        if (!string.IsNullOrEmpty(resourceType))
+                            description = $"{resourceType}.{description}";
+                    }
+                }
+            }
+
+            return description;
         }
 
         private GeneratorCodeProperty ProcessProperty(CodeProperty property)

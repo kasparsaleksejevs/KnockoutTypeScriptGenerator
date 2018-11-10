@@ -9,7 +9,7 @@ namespace Generator.ConsoleRunner
         static void Main(string[] args)
         {
 
-            Controllers();
+            Interfaces();
 
 
             Console.WriteLine("=============");

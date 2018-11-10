@@ -1,7 +1,6 @@
 ﻿using KnockoutTypeScriptGenerator.Metadata;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace KnockoutTypeScriptGenerator
 {
@@ -82,7 +81,7 @@ namespace KnockoutTypeScriptGenerator
             // Note: to get the text value of the enum use: `var text = SomeOtherEnumText[SomeOtherEnum.FirstValue];`
             result += $"const {generatorCodeEnum.Name}Text = new Map<number, string>([\r\n";
             foreach (var enumField in generatorCodeEnum.EnumFields)
-                result += $"\t[{generatorCodeEnum.Name}.{enumField.Name}, '{enumField.Description}'],\r\n";
+                result += $"\t[{generatorCodeEnum.Name}.{enumField.Name}, {enumField.Description}],\r\n";
             result += "]);";
 
             return result;

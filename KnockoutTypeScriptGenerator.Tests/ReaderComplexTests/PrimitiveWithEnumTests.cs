@@ -151,9 +151,9 @@ namespace KnockoutTypeScriptGenerator.Tests.ReaderComplexTests
         private GeneratorCodeEnum GetExpectedMyEnum()
         {
             var expectedEnum = new GeneratorCodeEnum($"{nameof(Generator)}.{nameof(Generator.SampleLibrary)}.{nameof(Generator.SampleLibrary.ComplexClasses)}", nameof(MyComplexEnum));
-            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(MyComplexEnum.SomeEnumValue1), NumericValue = "0" });
-            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(MyComplexEnum.SomeEnumValue2), NumericValue = "2" });
-            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(MyComplexEnum.SomeEnumValue3), NumericValue = "3" });
+            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(MyComplexEnum.SomeEnumValue1), NumericValue = "0", Description = "\"Some Enum Value 1\"" });
+            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(MyComplexEnum.SomeEnumValue2), NumericValue = "2", Description = "\"Some Enum Value 2\"" });
+            expectedEnum.EnumFields.Add(new GeneratorCodeEnumField { Name = nameof(MyComplexEnum.SomeEnumValue3), NumericValue = "3", Description = "TextResources.SomeEnumValue3" });
 
             return expectedEnum;
         }
