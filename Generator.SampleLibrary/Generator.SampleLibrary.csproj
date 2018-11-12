@@ -42,7 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComplexClasses\Sample_ManyDifferentProperties.cs" />
     <Compile Include="ComplexClasses\Sample_MultipleEnums_MultipleInts.cs" />
+    <Compile Include="ComplexClasses\Sample_PropertiesWithRefToClass.cs" />
+    <Compile Include="ComplexClasses\Sample_ReferencedClass.cs" />
     <Compile Include="ComplexClasses\SomeOtherEnum.cs" />
     <Compile Include="ComplexClasses\MyComplexEnum.cs" />
     <Compile Include="ComplexClasses\Sample_EnumListWithStringList.cs" />

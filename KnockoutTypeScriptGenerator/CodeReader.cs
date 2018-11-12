@@ -69,6 +69,17 @@ namespace KnockoutTypeScriptGenerator
             return new InterfaceGenerator().GenerateInterface(codeItem);
         }
 
+        public string GenerateClass()
+        {
+            return new KnockoutClassGenerator().GenerateClass(this.generatorCodeItems);
+        }
+
+        public string GenerateClass(string typeName)
+        {
+            var codeItem = this.generatorCodeItems.First(m => m.FullName == typeName);
+            return new KnockoutClassGenerator().GenerateClass(codeItem);
+        }
+
         private void ProcessClass(CodeClass codeClass)
         {
             var generatorClass = new GeneratorCodeClass(codeClass.Namespace.FullName, codeClass.Name);

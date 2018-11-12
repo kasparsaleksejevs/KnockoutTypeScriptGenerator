@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="ReaderComplexTests\ComplexTestBase.cs" />
     <Compile Include="ReaderComplexTests\PrimitiveWithEnumTests.cs" />
+    <Compile Include="ReaderComplexTests\ReferencedClassesTests.cs" />
     <Compile Include="ReaderSimpleTests\StringTests.cs" />
     <Compile Include="ShouldlyExtensions.cs" />
     <Compile Include="ReaderSimpleTests\IntegerTests.cs" />

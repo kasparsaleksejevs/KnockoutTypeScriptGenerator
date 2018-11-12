@@ -124,6 +124,8 @@ namespace KnockoutTypeScriptGenerator
                     var propertyTypeNamespace = generatorCodeProperty.Type.Substring(0, lastDotIndex);
                     if (targetType.Namespace == propertyTypeNamespace)
                         jsPropertyType = jsPropertyType.Substring(lastDotIndex + 1);
+
+                    jsPropertyType = "I" + jsPropertyType;
                 }
                 else
                     jsPropertyType = "any";

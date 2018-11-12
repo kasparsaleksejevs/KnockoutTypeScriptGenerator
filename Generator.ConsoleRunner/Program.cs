@@ -37,9 +37,12 @@ namespace Generator.ConsoleRunner
             var dte = DteLoader.GetDteBySolutionName(solutionName);
 
             var processor = new CodeReader(dte);
-            processor.ProcessClassFile($@"{solutionName}\Generator.SampleLibrary\ComplexClasses\Sample_MultipleEnums_MultipleInts.cs");
+            processor.ProcessClassFile($@"{solutionName}\Generator.SampleLibrary\ComplexClasses\Sample_PropertiesWithRefToClass.cs");
             var rez = processor.GenerateInterface();
             //var rez = processor.GenerateInterface("Generator.SampleLibrary.ComplexClasses.Sample_MultipleEnums_MultipleInts");
+            Console.WriteLine(rez);
+
+            rez = processor.GenerateClass();
             Console.WriteLine(rez);
         }
     }
